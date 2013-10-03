@@ -1,0 +1,11 @@
+You can use custom sound bank to make generator sound better. All you need is to put .sf2 file in this directory and use it in RealtimePlayer.java
+I strongly suggest you to download free soundbank Fluid R3, which includes all the Midi instruments.
+
+Instructions:
+1. Download soundfont from here: http://www.musescore.org/download/fluid-soundfont.tar.gz
+2. Extract it to /soundfonts
+3. Rename the file to fluid.sf2 or change constant SOUNDFONT_FILENAME in /src/player/RealtimePlayer.java
+4. Enjoy the new amazing sound of generator :)
+
+PS If the link is broken, please let me know.
+Armaxis.
