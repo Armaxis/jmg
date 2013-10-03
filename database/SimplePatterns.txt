@@ -1,0 +1,45 @@
+//Jump type - jump value - Relative length - Bar mark - Main Pitch - Main length 
+Name~Simple Upward Chord
+2~1~1
+End
+
+Name~Simple Downward Chord
+2~-1~1
+End
+
+Name~Simple Upward Chromatic
+0~1~1
+End
+
+Name~Simple Downward Chromatic
+0~-1~1
+End
+
+Name~Upward Tonality 1
+1~1~1
+End
+
+Name~Downward Tonality 1
+1~-1~1
+End
+
+Name~Upward Tonality 2
+1~2~1
+End
+
+Name~Downward Tonality 2
+1~-2~1
+End
+
+Name~Upward Tonality 3
+1~3~1
+End
+
+Name~Downward Tonality 3
+1~-3~1
+End
+
+
+Name~Simple Same Pattern
+3~0~1
+End

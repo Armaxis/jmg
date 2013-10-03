@@ -1,0 +1,33 @@
+//Jump type - jump value - Relative length - Bar mark - Main Pitch - Main length 
+//First goes two-notes patterns
+
+Name~Perebor
+2~1~1
+2~1~1
+2~-1~1
+End
+
+Name~Tili tili
+2~1~1
+2~-1~1
+2~1~1
+End
+
+Name~Mozart
+2~2~1
+1~-1~1
+1~1~1
+End
+
+Name~Alberty
+2~2~1
+2~-1~1
+2~1~1
+End
+
+
+Name~Perebor3
+2~2~1
+2~1~1
+2~-1~1
+End

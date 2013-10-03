@@ -1,0 +1,36 @@
+//Possible types of motives
+//Name~Dummy
+//A A'
+//End
+
+//Name~Dummy
+//A B
+//End
+
+Name~Dummy
+AA'A''B
+End
+
+Name~Dummy
+AA'A''B
+End
+
+Name~Dummy
+AA'BC
+End
+
+Name~Dummy
+ABA'C
+End
+
+//Name~Dummy
+//AA'BC
+//End
+
+//Name~Dummy
+//ABCB'
+//End
+
+//Name~Dummy
+//ABCD
+//End                   
