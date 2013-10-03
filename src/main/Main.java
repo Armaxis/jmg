@@ -48,14 +48,6 @@ public class Main {
 		DataStorage.init();
 		MotiveStructureStorage.init();
 		launchGenerator();
-		
-//		GUI gui = new GUI();
-//		gui.init();
-//		gui.show()
-		
-		//testPatterns();
-		
-		//testMotives();
 	}
 	
 	public static void showLoadingWindow()
@@ -80,7 +72,6 @@ public class Main {
 	
 	public static void hideLoadingWindow()
 	{
-		//LOADING_PANE.setVisible(false);
 		LOADING_PANE.dispose();
 		LOADING_PANE.setVisible(false);
 	}
@@ -139,10 +130,6 @@ public class Main {
 		generatorManager.addPlayer(filePlayer);
 		
 		
-//		IMusicGenerator dodec = new DodecaphonySeriesGenerator();
-//		generatorManager.setGenerator(dodec);
-		
-		//IMusicGenerator single = new SingleVoiceGenerator();
 		IMusicGenerator single = new MultiVoicesGenerator();
 		generatorManager.setGenerator(single);
 		
