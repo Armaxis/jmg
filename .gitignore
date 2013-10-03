@@ -2,5 +2,5 @@
 /.classpath
 /.project
 /.settings
-/soundfonts/fluid.sf2
+/soundfonts/*.sf2
 /logs
