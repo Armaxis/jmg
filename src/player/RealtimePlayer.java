@@ -25,12 +25,13 @@ import util.Log;
 
 import com.sun.media.sound.SF2Soundbank;
 
+import core.data.DataStorage;
+import core.data.PInstrument;
+
 public class RealtimePlayer extends Player {
 
 	private final String SOUNDFONT_FILENAME = "soundfonts/fluid.sf2";
-	//private final String SOUNDFONT_FILENAME = "soundfonts/Sonatina_Symphonic_Orchestra.sf2";
-	private final int TOTAL_BANKS_COUNT = 120;
-	//private final int TOTAL_BANKS_COUNT = 1;
+
 	
 	private Sequencer sequencer;
 	private Synthesizer synthesizer;
@@ -69,8 +70,10 @@ public class RealtimePlayer extends Player {
 				Soundbank soundbank = new SF2Soundbank(new FileInputStream(soundBankFile));
 				
 				Log.info("RealtimeMidiPlayer > init > Loading soundfonts from " + SOUNDFONT_FILENAME);
-				for (int i = 0; i < TOTAL_BANKS_COUNT; i++) {
-					synthesizer.loadInstrument(soundbank.getInstruments()[i]);
+				//Load only instruments that are available for playback
+				for (PInstrument instr : DataStorage.INSTRUMENTS)
+				{
+					synthesizer.loadInstrument(soundbank.getInstruments()[instr.midiId]);
 				}
 				
 				Log.info("RealtimeMidiPlayer > init > Loading of soundfonts complete!");
@@ -83,7 +86,7 @@ public class RealtimePlayer extends Player {
 			seqTrans.setReceiver(synthRec);
 			sequencer.open();
 			
-			isReady = true; //We are ready to play now, folks)
+			isReady = true; //We are ready to play now, folks
 			
 		} catch (FileNotFoundException e) {
 			Log.severe("RealtimeMidiPlayer > init > SOUNDFONTS FILE NOT FOUND! " + SOUNDFONT_FILENAME);
@@ -112,7 +115,6 @@ public class RealtimePlayer extends Player {
 			try {
 				sequencer.setSequence(sq);
 				sequencer.start();
-				//Log.info("RealtimeMidiPlayer > PlayScore > Sequence playback started. Time: " + TStamps.getTimeStamp());
 				
 				while (true) {
 					if (sequencer.isRunning()) {
@@ -126,9 +128,6 @@ public class RealtimePlayer extends Player {
 					}
 				}
 				
-				// Sequence is played. Now we can close sequencer
-				//sequencer.stop();
-				//TStamps.addTimeStamp();
 			} catch (InvalidMidiDataException imde) {
 				Log.severe("RealtimeMidiPlayer > PlayScore > Invalid Midi data!");
 			}
