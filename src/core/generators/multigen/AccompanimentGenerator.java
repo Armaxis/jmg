@@ -1,14 +1,12 @@
 package core.generators.multigen;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Random;
 
 import jm.JMC;
 import util.Tools;
 import core.data.DataStorage;
 import core.data.Motive;
-import core.data.PConstants;
 import core.data.PInstrument;
 import core.data.PNote;
 import core.data.chords.Chord;

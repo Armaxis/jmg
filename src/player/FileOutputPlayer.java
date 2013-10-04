@@ -1,14 +1,6 @@
 package player;
 
 import java.io.File;
-import java.io.IOException;
-
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.TargetDataLine;
 
 import jm.music.data.Part;
 import jm.music.data.Phrase;
@@ -16,8 +8,6 @@ import jm.music.data.Score;
 import jm.music.tools.Mod;
 import jm.util.Write;
 import util.FileEncoder;
-import util.Log;
-import util.SimpleAudioRecorder;
 
 public class FileOutputPlayer extends Player {
 	

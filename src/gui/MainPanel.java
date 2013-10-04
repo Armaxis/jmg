@@ -3,31 +3,18 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import jm.JMC;
 import core.MusicGeneratorManager;
 import core.data.DataStorage;
 import core.data.Voice;
 
-public class MainPanel extends JPanel implements ActionListener{
+public class MainPanel extends JPanel{
 	
-	private static String MINOR_TONALITY = "minor";
-    private static String MAJOR_TONALITY = "major";
-    
-    private static int MIN_PITCH = 30;
-    private static int MAX_PITCH = 90;
-    private static int INIT_PITCH = 60;
-    
-    private static int INSTR_PANEL_WIDTH = 400;
-    private static int INSTR_PANEL_HEIGHT = 60;
-    
     public LinkedList<InstrumentPanel> instrumentPanels;
     private JPanel instrumentsContainer;
     public HeaderPanel headerPanel;
@@ -74,7 +61,8 @@ public class MainPanel extends JPanel implements ActionListener{
 		{
 			newVoice = new Voice(Voice.SECOND_VOICE, Integer.toString(nextPanelId),  DataStorage.getInstrumentByName("Violin"), nextChannelId, 100);
 		}
-		//newVoice.setMuted(true);
+		
+		newVoice.setMuted(true);
 		generator.addVoice(newVoice);
 		
 		InstrumentPanel ip = new InstrumentPanel(nextPanelId, this);
@@ -89,18 +77,11 @@ public class MainPanel extends JPanel implements ActionListener{
 		nextPanelId++;
 		nextChannelId++;
 		
-		//We avoid panel no 9 which will lead to channel 10 which is for drums. Later will be changed
+		//We avoid using panel no 9 which will lead to channel 10 which is for drums. Later will be changed
 		//TODO: Change this
 		if (nextChannelId == 9)
 			nextChannelId++;
 	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand();
-	}
-
-
 
 	public void removeInstrument(int trackId) {
 		// TODO Auto-generated method stub

@@ -1,12 +1,12 @@
 package core;
 
 import gui.GUI;
+import gui.LoadingWindow;
 
 import java.util.LinkedList;
 
 import jm.music.data.Score;
 import jm.music.data.Tempo;
-import main.Main;
 import player.FileOutputPlayer;
 import player.Player;
 import util.Log;
@@ -76,8 +76,9 @@ public class MusicGeneratorManager {
 	public void start ()
 	{
 		gui.show();
-		Main.hideLoadingWindow();
-		RandomManager rm = new RandomManager(gui);
+		LoadingWindow.hideLoadingWindow();
+		
+		//RandomManager rm = new RandomManager(gui);
 		//rm.start();
 		Score score = generator.getScore();
 		

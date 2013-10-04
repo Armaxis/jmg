@@ -1,7 +1,5 @@
 package core.generators.multigen;
 
-import gui.InstrumentPanel;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 

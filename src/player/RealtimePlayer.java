@@ -30,9 +30,9 @@ import core.data.PInstrument;
 
 public class RealtimePlayer extends Player {
 
-	private final String SOUNDFONT_FILENAME = "soundfonts/fluid.sf2";
+	private final String SOUNDFONT_FILENAME = "fluid.sf2";
+	private final String SOUNDFONT_FOLDER 	= "soundfonts/";
 
-	
 	private Sequencer sequencer;
 	private Synthesizer synthesizer;
 	private LinkedList<Sequence> playbackSequencesQueue;
@@ -50,6 +50,7 @@ public class RealtimePlayer extends Player {
 			Log.info("RealtimeMidiPlayer > PlayScore > Score is empty.");
 			return;
 		}
+		
 		playbackSequencesQueue.add(scoreToSequence(score));
 		Log.info("RealtimeMidiPlayer > PlayScore > Score added to queue.");
 
@@ -57,14 +58,13 @@ public class RealtimePlayer extends Player {
 
 	@Override
 	public void init() {
-		
-		
+				
 		playbackSequencesQueue = new LinkedList<Sequence>();
 		try {
 			synthesizer = MidiSystem.getSynthesizer();
 			synthesizer.open();
 			
-			File soundBankFile = new File(SOUNDFONT_FILENAME);
+			File soundBankFile = new File(SOUNDFONT_FOLDER + SOUNDFONT_FILENAME);
 			if(soundBankFile.exists())
 			{
 				Soundbank soundbank = new SF2Soundbank(new FileInputStream(soundBankFile));
@@ -127,7 +127,6 @@ public class RealtimePlayer extends Player {
 						break;
 					}
 				}
-				
 			} catch (InvalidMidiDataException imde) {
 				Log.severe("RealtimeMidiPlayer > PlayScore > Invalid Midi data!");
 			}
@@ -144,15 +143,15 @@ public class RealtimePlayer extends Player {
 		
 		jm.midi.MidiParser.scoreToSMF(s, smf);
 		OutputStream os = new ByteArrayOutputStream();
-			try {
-				smf.write(os);
-				sq = MidiSystem.getSequence(new ByteArrayInputStream(((ByteArrayOutputStream) os).toByteArray()));
-			} catch (InvalidMidiDataException imde) {
-				Log.severe("RealtimeMidiPlayer > PlayScore > Invalid Midi data!");
-			} catch (IOException ioe) {
-				Log.severe("RealtimeMidiPlayer > PlayScore > Score conversion error!");
-				return null;
-			}
+		try {
+			smf.write(os);
+			sq = MidiSystem.getSequence(new ByteArrayInputStream(((ByteArrayOutputStream) os).toByteArray()));
+		} catch (InvalidMidiDataException imde) {
+			Log.severe("RealtimeMidiPlayer > PlayScore > Invalid Midi data!");
+		} catch (IOException ioe) {
+			Log.severe("RealtimeMidiPlayer > PlayScore > Score conversion error!");
+			return null;
+		}
 			
 		Log.info("RealtimeMidiPlayer > PlayScore > Score convered to MIDI.");
 		

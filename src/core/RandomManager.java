@@ -1,12 +1,12 @@
 package core;
 
-import java.util.Random;
-
-import core.data.DataStorage;
-import util.Log;
 import gui.GUI;
 import gui.HeaderPanel;
 import gui.MainPanel;
+
+import java.util.Random;
+
+import core.data.DataStorage;
 
 public class RandomManager extends Thread {
 

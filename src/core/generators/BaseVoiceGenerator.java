@@ -6,7 +6,6 @@ import java.util.List;
 
 import jm.JMC;
 import util.Log;
-import core.data.DataStorage;
 import core.data.Motive;
 import core.data.PInstrument;
 import core.data.patterns.CPattern;

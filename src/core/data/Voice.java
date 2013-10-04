@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
-import jm.JMC;
 import jm.music.data.Phrase;
 import util.Log;
 import util.Tools;
