@@ -32,10 +32,9 @@ public class Pattern{
 	{
 		notes = new LinkedList<PNote>();
 		String[] rows = inputdata.split(";");
-		for (int i = 0; i < rows.length; i ++)
-		{
-			notes.add(new PNote(rows[i]));
-		}
+		
+		for (String s : rows)
+			notes.add(new PNote(s));
 	}
 	
 	public String getName() {

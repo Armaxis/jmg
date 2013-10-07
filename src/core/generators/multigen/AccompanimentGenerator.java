@@ -22,6 +22,7 @@ public class AccompanimentGenerator extends BaseVoiceGenerator{
 	private int octaveSummand;
 	private int lastNote;
 	private Double[] CHANCES_OF_NOTE_JUMP = new Double[]{0.5, 0.15, 0.15, 0.07, 0.07, 0.06};//TODO: Move somewhere else;
+	private int[] SHIFTED_OCTAVE_ELEMENTS = new int[]{0, 1, 2, 3, 4, 5, 6, -5, -4, -3, -2, -1};
 	private Pattern randomPatternForAccomp;
 	
 	public AccompanimentGenerator() {
@@ -46,7 +47,7 @@ public class AccompanimentGenerator extends BaseVoiceGenerator{
 		this.lastNote = lNote;
 		
 		if (this.lastNote == 0)
-			this.lastNote = 60;
+			this.lastNote = currentTonality.getPitch();
 		
 		generateSecondRun();
 		convertSecondRunToStables();
@@ -139,13 +140,19 @@ public class AccompanimentGenerator extends BaseVoiceGenerator{
 			doubledChord[k + chordLength] 	= chord.getChord()[k];
 		}
 		
+		
+		//Нота не должна отстоять слишком далеко от основного тона тональности, т.е. если основная нота си, то должно все быть в диапазоне -5..6 от этой ноты
+		//Необходимо перевести высоту тона в диапазон -5..6 чтобы при расчете нот doubleChords правильно брать расстояние
+		int pitchValue = SHIFTED_OCTAVE_ELEMENTS[currentTonality.getPitch() % 12];
+		
+		
 		//Заводим мап в который будем записывать кандидатов в стартовые ноты и их вероятности
 		HashMap<Integer, Double> firstNoteCandidates = new HashMap<Integer, Double>();
 		for (int k = 0; k < doubledChord.length; k++)
 		{
 			//Note shouldn't be far from main note in tonality
-			//Нота не должна отстоять слишком далеко от основного тона тональности
-			if (Math.abs(doubledChord[k] - currentTonality.getPitch() % 12) > 6)
+			
+			if (Math.abs(doubledChord[k] - pitchValue) > 6)
 				continue;
 			
 			//Вычисляем расстояние между нотами
