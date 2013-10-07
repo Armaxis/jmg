@@ -48,7 +48,7 @@ public class HeaderPanel extends JPanel {
 	private JLayeredPane generationPanel;
 	private JSlider volumeSlider;
 	private JPanel buttonsPanel;	
-	private JCheckBox muteAllCheckBox;
+	public JCheckBox muteAllCheckBox;
 	
 	public HeaderPanel(MainPanel _parent)
 	{
@@ -226,7 +226,7 @@ public class HeaderPanel extends JPanel {
 		});
         
 //        recordButton = new JButton("Запись");
-//        resetButton.addActionListener(new ActionListener() {
+//        recordButton.addActionListener(new ActionListener() {
 //			
 //			@Override
 //			public void actionPerformed(ActionEvent arg0) {
@@ -239,7 +239,7 @@ public class HeaderPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//parent.removeAllInstruments();
+				parent.removeAllInstruments();
 			}
 		});
         
@@ -258,7 +258,7 @@ public class HeaderPanel extends JPanel {
 		});
 
 	    buttonsPanel.add(addInstrumentButton, new GBC(0,0,1,1).fill(GBC.HORIZONTAL));
-	    buttonsPanel.add(muteAllCheckBox, new GBC(0,1,1,1).fill(GBC.HORIZONTAL));
-	    //buttonsPanel.add(resetButton, new GBC(0,1,1,1).fill(GBC.HORIZONTAL));	
+	    buttonsPanel.add(resetButton, new GBC(0,1,1,1).fill(GBC.HORIZONTAL));	
+	    buttonsPanel.add(muteAllCheckBox, new GBC(0,2,1,1).fill(GBC.HORIZONTAL));
 	}
 }

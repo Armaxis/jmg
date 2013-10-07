@@ -84,7 +84,6 @@ public class MainPanel extends JPanel{
 	}
 
 	public void removeInstrument(int trackId) {
-		// TODO Auto-generated method stub
 		InstrumentPanel panel = null;
 		for (InstrumentPanel ip : instrumentPanels)
 		{
@@ -116,5 +115,16 @@ public class MainPanel extends JPanel{
 		instrumentsContainer.revalidate();
 		instrumentsContainer.repaint();
 		
+		if(instrumentPanels.isEmpty())
+			headerPanel.muteAllCheckBox.setSelected(true);
+	}
+
+
+
+	public void removeAllInstruments() {
+		while(!instrumentPanels.isEmpty())
+		{
+			removeInstrument(instrumentPanels.getFirst().trackId);
+		}
 	}
 }
