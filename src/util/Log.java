@@ -31,7 +31,11 @@ public class Log {
 			logger.addHandler(fh);  
 	        SimpleFormatter formatter = new SimpleFormatter();  
 	        fh.setFormatter(formatter);  
+	        
+	        //Comment next line to make logger put into file everything from level INFO
+	        //Now it will log only errors (severe)
 	        logger.setLevel(Level.WARNING);
+	        
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

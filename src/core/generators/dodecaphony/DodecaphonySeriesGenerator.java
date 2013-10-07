@@ -9,6 +9,10 @@ import jm.music.data.Score;
 import core.data.Voice;
 import core.generators.IMusicGenerator;
 
+/** This class can be used to generate dodecaphonic music which is based on twelve-notes series. 
+ * @author Armaxis
+ *
+ */
 public class DodecaphonySeriesGenerator implements IMusicGenerator {
 
 	private Dodecaphonizer dodecaphonizer ;

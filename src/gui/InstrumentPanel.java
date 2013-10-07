@@ -52,7 +52,7 @@ public class InstrumentPanel extends JPanel {
 	public int trackId;
 	private MainPanel mainPanel;
 	
-	private final String IMAGE_EXTENSION = ".bmp";
+	private final String IMAGE_EXTENSION = ".jpg";
 	private Voice voice;
 	
 	public InstrumentPanel(int id, MainPanel _mainPanel)

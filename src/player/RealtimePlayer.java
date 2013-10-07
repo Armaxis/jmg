@@ -153,7 +153,7 @@ public class RealtimePlayer extends Player {
 			return null;
 		}
 			
-		Log.info("RealtimeMidiPlayer > PlayScore > Score convered to MIDI.");
+		Log.info("RealtimeMidiPlayer > PlayScore > Score converted to MIDI.");
 		
 		return sq;
 	}

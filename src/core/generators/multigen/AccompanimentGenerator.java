@@ -145,13 +145,12 @@ public class AccompanimentGenerator extends BaseVoiceGenerator{
 		//Необходимо перевести высоту тона в диапазон -5..6 чтобы при расчете нот doubleChords правильно брать расстояние
 		int pitchValue = SHIFTED_OCTAVE_ELEMENTS[currentTonality.getPitch() % 12];
 		
-		
 		//Заводим мап в который будем записывать кандидатов в стартовые ноты и их вероятности
 		HashMap<Integer, Double> firstNoteCandidates = new HashMap<Integer, Double>();
 		for (int k = 0; k < doubledChord.length; k++)
 		{
-			//Note shouldn't be far from main note in tonality
 			
+			//Note shouldn't be far from main note in tonality
 			if (Math.abs(doubledChord[k] - pitchValue) > 6)
 				continue;
 			
