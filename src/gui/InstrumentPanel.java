@@ -37,7 +37,7 @@ public class InstrumentPanel extends JPanel {
 	private JSlider panSlider;
 	public JCheckBox muteCheckBox;
 	public JButton deleteButton;
-	private JComboBox<String> octaveComboBox;
+	public JComboBox<String> octaveComboBox;
 	
 	private JLabel instrumentImage;
 	private JPanel imagePanel;

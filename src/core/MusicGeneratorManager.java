@@ -13,6 +13,7 @@ import util.Log;
 import core.data.Settings;
 import core.data.Voice;
 import core.generators.IMusicGenerator;
+import core.record.RecordsManager;
 
 public class MusicGeneratorManager {
 
@@ -20,6 +21,7 @@ public class MusicGeneratorManager {
 	private IMusicGenerator generator;
 	private double timeSignature;
 	private GUI gui;
+	public RecordsManager recordsManager;
 	
 	/** Class constructor
 	 * 
@@ -28,9 +30,13 @@ public class MusicGeneratorManager {
 		players = new LinkedList<Player>();
 		timeSignature = 4 / 4 ;
 		Settings.TEMPO = new Tempo(Tempo.DEFAULT_TEMPO); //60
+		recordsManager = new RecordsManager();
 		
 		gui = new GUI();
 		gui.init(this);
+		
+		//Only after initializing the gui we can init recordsManager. 
+		recordsManager.init(gui);
 	}
 	
 	public void addPlayer (Player player)

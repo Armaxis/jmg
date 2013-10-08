@@ -31,7 +31,7 @@ public class HeaderPanel extends JPanel {
 	public JComboBox tonalityKey;
 	public LinkedList<JRadioButton> tonalityTypes;
 	//private JLabel tempoLabel;
-	private JSlider tempoSlider;
+	public JSlider tempoSlider;
 	
 	
 	public JCheckBox melismaCheckBox;
@@ -43,10 +43,10 @@ public class HeaderPanel extends JPanel {
 	
 	public String[] keys;
 	private String[] tonalityTypesString;
-	private JComboBox<Integer> melismaComboBox;
+	public JComboBox<Integer> melismaComboBox;
 	private JLayeredPane tonalityPanel;
 	private JLayeredPane generationPanel;
-	private JSlider volumeSlider;
+	public JSlider volumeSlider;
 	private JPanel buttonsPanel;	
 	public JCheckBox muteAllCheckBox;
 	
@@ -225,14 +225,14 @@ public class HeaderPanel extends JPanel {
 			}
 		});
         
-//        recordButton = new JButton("Запись");
-//        recordButton.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				//parent.removeAllInstruments();
-//			}
-//		});
+        recordButton = new JButton("Запись");
+        recordButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				parent.showRecorder();
+			}
+		});
         
         resetButton = new JButton("Очистить");
         resetButton.addActionListener(new ActionListener() {
@@ -260,5 +260,6 @@ public class HeaderPanel extends JPanel {
 	    buttonsPanel.add(addInstrumentButton, new GBC(0,0,1,1).fill(GBC.HORIZONTAL));
 	    buttonsPanel.add(resetButton, new GBC(0,1,1,1).fill(GBC.HORIZONTAL));	
 	    buttonsPanel.add(muteAllCheckBox, new GBC(0,2,1,1).fill(GBC.HORIZONTAL));
+	    buttonsPanel.add(recordButton, new GBC(0,3,1,1).fill(GBC.HORIZONTAL));
 	}
 }

@@ -21,11 +21,12 @@ public class MainPanel extends JPanel{
     private int nextPanelId = 0; //Позволяет указать на какое место пихать следующую панель с инструментом
     private int nextChannelId = 1; 
     
+    private MainFrame frame;
     public MusicGeneratorManager generator;
-
     
-	public MainPanel(MusicGeneratorManager musicGeneratorManager) {
+	public MainPanel(MainFrame frame, MusicGeneratorManager musicGeneratorManager) {
         
+		this.frame = frame;
 		this.generator = musicGeneratorManager;
 		
 		setLayout(new BorderLayout());
@@ -47,8 +48,6 @@ public class MainPanel extends JPanel{
         add(headerContainer, BorderLayout.PAGE_START);
         add(scrollInstrumentsPane, BorderLayout.CENTER);
 	}
-	
-	
 
 	public void addInstrument()
 	{
@@ -127,4 +126,10 @@ public class MainPanel extends JPanel{
 			removeInstrument(instrumentPanels.getFirst().trackId);
 		}
 	}
+
+
+	public void showRecorder() {
+		frame.showRecorder();
+	}
+	
 }

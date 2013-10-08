@@ -18,29 +18,31 @@ public class MainFrame extends JFrame {
 	public MenuBar menus;
 	private MusicGeneratorManager generator;
 	private MainFrame frame;
+	private RecordFrame recorder;
 	
 	public MainFrame(String title, MusicGeneratorManager _generator) throws HeadlessException {
 		super(title);
 		
 		this.frame = this;		
-		this.generator = _generator;
+		this.setGenerator(_generator);
 
         //Create and set up the content pane.
-		mainPanel = new MainPanel(generator);
+		mainPanel = new MainPanel(frame, getGenerator());
 		mainPanel.setOpaque(true); //content panes must be opaque
         
 		initMenu();
 		
         setContentPane(mainPanel);
         setMenuBar(menus);
+        
+		recorder = new RecordFrame(this);
 	}
 	
 	private void initMenu() {
 		menus = new MenuBar();
 		Menu edit  = new Menu("Файл", true);
 		
-		
-		 //------
+		//------
 		MenuItem saveToMidi = new MenuItem("Сохранить в MIDI файл");
 		saveToMidi.addActionListener(new ActionListener() {
 			
@@ -51,7 +53,7 @@ public class MainFrame extends JFrame {
 	             
 	             //write a MIDI file and stave properties to disk
 	             if ( fd.getFile() != null)
-	              	generator.saveMidi(fd.getDirectory() + fd.getFile());
+	              	getGenerator().saveMidi(fd.getDirectory() + fd.getFile());
 			}
 		});
 		
@@ -68,17 +70,29 @@ public class MainFrame extends JFrame {
 	             
 	             //write a MIDI file and stave properties to disk
 	             if ( fd.getFile() != null)
-	              	generator.saveMP3(fd.getDirectory() + fd.getFile());
+	              	getGenerator().saveMP3(fd.getDirectory() + fd.getFile());
 			}
 		});
         edit.add(saveToMP3);
-        
         menus.add(edit);
-        
-		
 	}
 	
 	public MainPanel getMainPanel() {
 		return mainPanel;
+	}
+
+	public MusicGeneratorManager getGenerator() {
+		return generator;
+	}
+
+	public void setGenerator(MusicGeneratorManager generator) {
+		this.generator = generator;
+	}
+
+	public void showRecorder() {
+		recorder.setVisible(true);
+		//Place to the right of generator
+		recorder.setLocation(getLocation().x + getSize().width, getLocation().y); 
+		recorder.setSize(recorder.getSize().width, getSize().height);
 	}
 }
