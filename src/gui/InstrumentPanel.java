@@ -51,6 +51,7 @@ public class InstrumentPanel extends JPanel {
 	
 	public int trackId;
 	private MainPanel mainPanel;
+	private InstrumentPanel thisPanel;
 	
 	private final String IMAGE_EXTENSION = ".jpg";
 	private Voice voice;
@@ -59,6 +60,9 @@ public class InstrumentPanel extends JPanel {
 	{ 
 		trackId = id;
 		mainPanel = _mainPanel;
+		thisPanel = this; //Used inside action listeners to pass as parameter to functions
+
+		mainPanel.generator.recordsManager.recordAddInstrument(this);
 		
 	    setLayout(new GridBagLayout());
 	    
@@ -118,6 +122,7 @@ public class InstrumentPanel extends JPanel {
 					
 				voice.setPinstrument(DataStorage.INSTRUMENTS.get(instrumentCombo.getSelectedIndex()));
 				octaveComboBox.setSelectedIndex(voice.pinstrument.octaveIndex); //Это повторно переставит обновит voice.pinstrument.octaveIndex но заодно освежит комбобокс
+				mainPanel.generator.recordsManager.recordInstrType(thisPanel);
 			}
 		});
 	    
@@ -170,6 +175,7 @@ public class InstrumentPanel extends JPanel {
 					}
 				}
 				
+				mainPanel.generator.recordsManager.recordInstrRole(thisPanel);
 			}
 		});
 	    
@@ -192,6 +198,7 @@ public class InstrumentPanel extends JPanel {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				voice.volume = volumeSlider.getValue();
+				mainPanel.generator.recordsManager.recordInstrVolume(thisPanel);
 			}
 		});
 	    
@@ -211,6 +218,7 @@ public class InstrumentPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				voice.octaveSummand = Tools.octaveIndexToShift(octaveComboBox.getSelectedIndex());
+				mainPanel.generator.recordsManager.recordInstrOctave(thisPanel);
 			}
 		});
 	    
@@ -226,14 +234,14 @@ public class InstrumentPanel extends JPanel {
 			}
 		});
 	    	
-	    optionsPanel.add(volumeLabel, new GBC(0,0,2,1).fill(GBC.HORIZONTAL));
-	    optionsPanel.add(volumeSlider, new GBC(0,1,2,1).fill(GBC.HORIZONTAL));
+	    optionsPanel.add(volumeLabel, new GBC(0,0,1,1).fill(GBC.HORIZONTAL));
+	    optionsPanel.add(volumeSlider, new GBC(0,1,1,1).fill(GBC.HORIZONTAL));
 	    
-	    optionsPanel.add(rangeLabel, new GBC(0,2,1,1).fill(GBC.HORIZONTAL));
-	    optionsPanel.add(rangeSlider, new GBC(0,3,1,1).fill(GBC.HORIZONTAL));
+	    //optionsPanel.add(rangeLabel, new GBC(0,2,1,1).fill(GBC.HORIZONTAL));
+	    //optionsPanel.add(rangeSlider, new GBC(0,3,1,1).fill(GBC.HORIZONTAL));
 	    
-	    optionsPanel.add(octaveLabel, new GBC(2,0,1,1).fill(GBC.HORIZONTAL));
-	    optionsPanel.add(octaveComboBox, new GBC(2,1,1,1).fill(GBC.HORIZONTAL));
+	    optionsPanel.add(octaveLabel, new GBC(0,2,1,1).fill(GBC.HORIZONTAL));
+	    optionsPanel.add(octaveComboBox, new GBC(0,3,1,1).fill(GBC.HORIZONTAL));
 
 	}
 	
@@ -246,6 +254,7 @@ public class InstrumentPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				mainPanel.removeInstrument(trackId);
+				mainPanel.generator.recordsManager.recordRemoveInstr(thisPanel);
 			}
 		});
 	    
@@ -257,6 +266,7 @@ public class InstrumentPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setMuted(muteCheckBox.isSelected());
+				mainPanel.generator.recordsManager.recordInstrMute(thisPanel);
 			}
 		});
 	    

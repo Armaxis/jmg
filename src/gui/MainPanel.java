@@ -80,6 +80,8 @@ public class MainPanel extends JPanel{
 		//TODO: Change this
 		if (nextChannelId == 9)
 			nextChannelId++;
+		
+
 	}
 
 	public void removeInstrument(int trackId) {
@@ -104,6 +106,7 @@ public class MainPanel extends JPanel{
 		}
 		
 		generator.removeVoice(panel.getVoice());
+		generator.recordsManager.recordRemoveInstr(panel);
 		
 		//Remember channel where we can apply next instrument
 		nextChannelId = panel.getVoice().channel;
@@ -125,6 +128,7 @@ public class MainPanel extends JPanel{
 		{
 			removeInstrument(instrumentPanels.getFirst().trackId);
 		}
+		generator.recordsManager.recordRemoveAllInstr();
 	}
 
 

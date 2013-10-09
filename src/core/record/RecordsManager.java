@@ -14,7 +14,7 @@ public class RecordsManager {
 	public static int RECORDER_BAR_COUNTER = 0;
 	private MainPanel mainPanel;
 	private HeaderPanel headerPanel;
-	private boolean isRecording;
+	public static boolean isRecording;
 	private LinkedList<RecordEvent> recordedEvents;
 	private HashMap<InstrumentPanel, Integer> instrumentPanelsIds;
 	private int nextPanelIdCounter;
@@ -32,43 +32,127 @@ public class RecordsManager {
 		
 		//Record initial state of generator
 		//Tonality (key and type)
-		record(RecordEvent.CHANGE_TONALITY_KEY, headerPanel.tonalityKey.getSelectedIndex());
-		record(RecordEvent.CHANGE_TONALITY_TYPE, headerPanel.tonalityTypes.getFirst().isSelected());
+		recordTonalityKey();
+		recordTonalityType();
 		
 		//Melismas
-		record(RecordEvent.SET_MELISMAS, headerPanel.melismaCheckBox.isSelected());
-		record(RecordEvent.SET_MELISMAS_CHANCE, headerPanel.melismaComboBox.getSelectedIndex());
+		recordSetMelismas();
+		recordSetMelismasChance();
 		
 		//Tempo
-		record(RecordEvent.SET_TEMPO, headerPanel.tempoSlider.getValue());
+		recordTempo();
 		
 		//Volume
-		record(RecordEvent.SET_OVERALL_VOLUME, headerPanel.volumeSlider.getValue());
+		recordVolume();
+		
+		//Mute all position
+		//recordInstrMuteAll();
 		
 		//Add all instruments
 		for (InstrumentPanel ip : mainPanel.instrumentPanels)
-		{
-			record(RecordEvent.ADD_INSTRUMENT, nextPanelIdCounter);
-			instrumentPanelsIds.put(ip, nextPanelIdCounter);
-			nextPanelIdCounter ++;
-		}
+			recordAddInstrument(ip);
 		
 		//Init all instruments
 		for (InstrumentPanel ip : instrumentPanelsIds.keySet())
 		{
-			int instrId = instrumentPanelsIds.get(ip); 
-			record(RecordEvent.SET_INSTRUMENT_TYPE, DataStorage.INSTRUMENTS.get(ip.instrumentCombo.getSelectedIndex()).midiId, instrId);
-			record(RecordEvent.SET_INSTRUMENT_ROLE, ip.instrumentTypeCombo.getSelectedIndex(), instrId);
-			record(RecordEvent.SET_INSTRUMENT_VOLUME, ip.volumeSlider.getValue(), instrId);
-			record(RecordEvent.SET_INSTRUMENT_OCTAVE, ip.octaveComboBox.getSelectedIndex(), instrId);
-			record(RecordEvent.SET_INSTRUMENT_MUTE, ip.muteCheckBox.isSelected(), instrId);
+			recordInstrType(ip);
+			recordInstrRole(ip);
+			recordInstrVolume(ip);
+			recordInstrOctave(ip);
+			recordInstrMute(ip);
 		}
-		System.out.println(recordedEvents.toString());
 	}
 
 	public void init(GUI gui) {
 		this.mainPanel = gui.frame.getMainPanel();
 		this.headerPanel = mainPanel.headerPanel;
+	}
+	
+	public void recordTonalityKey() {
+		record(RecordEvent.CHANGE_TONALITY_KEY, headerPanel.tonalityKey.getSelectedIndex());
+	}
+
+	public void recordTonalityType() {
+		record(RecordEvent.CHANGE_TONALITY_TYPE, headerPanel.tonalityTypes.getFirst().isSelected());
+	}
+	
+	public void recordSetMelismas() {
+		record(RecordEvent.SET_MELISMAS, headerPanel.melismaCheckBox.isSelected());
+	}
+	
+	public void recordSetMelismasChance() {
+		record(RecordEvent.SET_MELISMAS_CHANCE, headerPanel.melismaComboBox.getSelectedIndex());
+	}
+	
+	public void recordTempo() {
+		record(RecordEvent.SET_TEMPO, headerPanel.tempoSlider.getValue());
+	}
+	
+	public void recordVolume() {
+		record(RecordEvent.SET_OVERALL_VOLUME, headerPanel.volumeSlider.getValue());
+	}
+	
+	public void recordAddInstrument(InstrumentPanel ip) {
+		if(!isRecording)
+			return;
+		
+		record(RecordEvent.ADD_INSTRUMENT, nextPanelIdCounter);
+		instrumentPanelsIds.put(ip, nextPanelIdCounter);
+		nextPanelIdCounter ++;
+	}
+	
+	public void recordInstrType(InstrumentPanel ip) {
+		if(!isRecording)
+			return;
+		
+		int instrId = instrumentPanelsIds.get(ip); 
+		record(RecordEvent.SET_INSTRUMENT_TYPE, DataStorage.INSTRUMENTS.get(ip.instrumentCombo.getSelectedIndex()).midiId, instrId);
+	}
+	
+	public void recordInstrRole(InstrumentPanel ip) {
+		if(!isRecording)
+			return;
+		
+		int instrId = instrumentPanelsIds.get(ip); 
+		record(RecordEvent.SET_INSTRUMENT_ROLE, ip.instrumentTypeCombo.getSelectedIndex(), instrId);
+	}
+	
+	public void recordInstrVolume(InstrumentPanel ip) {
+		if(!isRecording)
+			return;
+		
+		int instrId = instrumentPanelsIds.get(ip); 
+		record(RecordEvent.SET_INSTRUMENT_VOLUME, ip.volumeSlider.getValue(), instrId);
+	}
+	
+	public void recordInstrOctave(InstrumentPanel ip) {
+		if(!isRecording)
+			return;
+		
+		int instrId = instrumentPanelsIds.get(ip); 
+		record(RecordEvent.SET_INSTRUMENT_OCTAVE, ip.octaveComboBox.getSelectedIndex(), instrId);
+	}
+	
+	public void recordInstrMute(InstrumentPanel ip) {
+		if(!isRecording)
+			return;
+		
+		int instrId = instrumentPanelsIds.get(ip); 
+		record(RecordEvent.SET_INSTRUMENT_MUTE, ip.muteCheckBox.isSelected(), instrId);
+	}
+	
+	public void recordInstrMuteAll() { 
+		record(RecordEvent.MUTE_ALL_INSTRUMENTS, headerPanel.muteAllCheckBox.isSelected());
+	}
+	
+	public void recordRemoveAllInstr() {
+		record(RecordEvent.REMOVE_ALL_INSTRUMENTS, 1);
+		instrumentPanelsIds = new HashMap<InstrumentPanel, Integer>();
+	}
+	
+	public void recordRemoveInstr(InstrumentPanel ip) {
+		record(RecordEvent.REMOVE_INSTRUMENT, 1);
+		instrumentPanelsIds.remove(ip);
 	}
 	
 	private void record(String eventType, int value)
@@ -100,7 +184,18 @@ public class RecordsManager {
 	
 	private void record(String eventType, String value, int instrumentId)
 	{
-		recordedEvents.add(new RecordEvent(eventType, value, RECORDER_BAR_COUNTER, instrumentId));
+		if(!isRecording)
+			return;
+		
+		RecordEvent newEvent = new RecordEvent(eventType, value, RECORDER_BAR_COUNTER, instrumentId);
+		recordedEvents.add(newEvent);
+		System.out.println(newEvent.toString());
 	}
+
+	public static void incrementCounter() {
+		if (isRecording)
+			RECORDER_BAR_COUNTER++;
+	}
+
 
 }

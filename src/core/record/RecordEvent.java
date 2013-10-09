@@ -11,8 +11,7 @@ public class RecordEvent {
 	public static String ADD_INSTRUMENT	 		= "addInstr";
 	public static String REMOVE_INSTRUMENT		= "removeInstr";
 	public static String REMOVE_ALL_INSTRUMENTS	= "removeAllInstr";
-	public static String MUTE_INSTRUMENT		= "muteInstr";
-	public static String MUTE_ALL_INSTRUMENT	= "muteAllInstr";
+	public static String MUTE_ALL_INSTRUMENTS	= "muteAllInstr";
 	
 	public static String SET_INSTRUMENT_TYPE	= "setInstType";
 	public static String SET_INSTRUMENT_ROLE	= "setInstRole";

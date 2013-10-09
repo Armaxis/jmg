@@ -96,6 +96,7 @@ public class HeaderPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Settings.setTonalityPitch(tonalityKey.getSelectedIndex());
+				parent.generator.recordsManager.recordTonalityKey();
 			}
 		});
 	    
@@ -118,6 +119,7 @@ public class HeaderPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Settings.setTonalityType(DataStorage.getTonalityTypeByName(e.getActionCommand()));
+					parent.generator.recordsManager.recordTonalityType();
 				}
 			});
         }
@@ -153,6 +155,7 @@ public class HeaderPanel extends JPanel {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				Settings.TEMPO.setTempo(tempoSlider.getValue());
+				parent.generator.recordsManager.recordTempo();
 			}
 		});
 
@@ -165,6 +168,7 @@ public class HeaderPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				Settings.USE_MELISMAS = melismaCheckBox.isSelected();
 				melismaComboBox.setEnabled(Settings.USE_MELISMAS);
+				parent.generator.recordsManager.recordSetMelismas();
 			}
 		});
         
@@ -181,6 +185,7 @@ public class HeaderPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Settings.MELISMAS_CHANCE = melismaComboBox.getSelectedIndex() + 1;
+				parent.generator.recordsManager.recordSetMelismasChance();
 			}
 		});
 	    
@@ -198,6 +203,7 @@ public class HeaderPanel extends JPanel {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				Settings.OVERALL_VOLUME = volumeSlider.getValue();
+				parent.generator.recordsManager.recordVolume();
 			}
 		});
 	    
@@ -253,6 +259,7 @@ public class HeaderPanel extends JPanel {
 				{
 					ip.muteCheckBox.setSelected(muteAllCheckBox.isSelected());
 					ip.setMuted(muteAllCheckBox.isSelected());
+					parent.generator.recordsManager.recordInstrMute(ip);
 				}
 			}
 		});

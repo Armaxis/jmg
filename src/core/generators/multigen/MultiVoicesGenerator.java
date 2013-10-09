@@ -14,6 +14,7 @@ import core.data.chords.Chord;
 import core.data.tonality.MajorTonality;
 import core.generators.Harmonizer;
 import core.generators.IMusicGenerator;
+import core.record.RecordsManager;
 
 public class MultiVoicesGenerator implements IMusicGenerator {
 
@@ -81,9 +82,11 @@ public class MultiVoicesGenerator implements IMusicGenerator {
 	
 	public void updateBarCounterAndRefresh()
 	{
-		//Инкременирует счетчик тактов. Если прошло 4 такта то у всех аккомпанементов меняет структуру
+		//Инкременирует счетчик тактов. 
 		Settings.accompanimentBarCounter++;
+		RecordsManager.incrementCounter();
 		
+		//Если прошло 4 такта то у всех аккомпанементов меняет структуру
 		if(Settings.accompanimentBarCounter >= 4)
 		{
 			for (Voice v : voices)
