@@ -20,6 +20,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import util.Log;
 import core.data.DataStorage;
@@ -39,7 +41,9 @@ public class RecordsManager {
 	
 	private MainPanel mainPanel;
 	private HeaderPanel headerPanel;
+	private RecordFrame recorderFrame;
 	private LinkedList<RecordEvent> recordedEvents;
+	public LinkedList<RecordEvent> playbackEvents;
 	private HashMap<InstrumentPanel, Integer> instrumentPanelsIds;
 	private int nextPanelIdCounter;
 	public LinkedList<String> recordsList;
@@ -50,6 +54,7 @@ public class RecordsManager {
 		RECORDER_BAR_COUNTER = 0;
 		nextPanelIdCounter = 0;
 		recordedEvents = new LinkedList<RecordEvent>();
+		playbackEvents = new LinkedList<RecordEvent>();
 		instrumentPanelsIds = new HashMap<InstrumentPanel, Integer>();
 		refreshRecordsList();
 	}
@@ -174,12 +179,16 @@ public class RecordsManager {
 			tfe.printStackTrace();
 		}
 		
+		//Update list of records
+		refreshRecordsList();
+		
 		RECORDER_BAR_COUNTER = 0;
 	}
 	
 	public void init(GUI gui) {
 		this.mainPanel = gui.frame.getMainPanel();
 		this.headerPanel = mainPanel.headerPanel;
+		this.recorderFrame = gui.frame.getRecorderFrame();
 	}
 	
 	public void recordTonalityKey() {
@@ -303,7 +312,7 @@ public class RecordsManager {
 		
 		RecordEvent newEvent = new RecordEvent(eventType, value, RECORDER_BAR_COUNTER, instrumentId);
 		recordedEvents.add(newEvent);
-		System.out.println(newEvent.toString());
+		recorderFrame.log(newEvent.toString());
 	}
 
 	public static void incrementCounter() {
@@ -335,5 +344,46 @@ public class RecordsManager {
 		if(f.exists())
 			f.delete();
 		refreshRecordsList();		
+	}
+	
+	public void readRecordFile(String fileName)
+	{
+		try {
+			playbackEvents = new LinkedList<RecordEvent>();
+			File fXmlFile = new File(RECORDS_FOLDER + "/" + fileName + RECORD_EXTENSION);
+			
+			if (!fXmlFile.exists())
+			{
+				Log.severe("RecordsManager > readRecordFile() > File " + fileName + " not found!");
+			}
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(fXmlFile);
+		 
+			//optional, but recommended
+			//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+			doc.getDocumentElement().normalize();
+		 
+			NodeList nList = doc.getElementsByTagName("Event");
+		 	for (int temp = 0; temp < nList.getLength(); temp++) {
+		 
+				Node nNode = nList.item(temp);
+		 		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+		 
+					Element el = (Element) nNode;
+					
+					RecordEvent event = new RecordEvent(
+						el.getAttribute("type"),
+						el.getAttribute("value"),
+						Integer.parseInt(el.getAttribute("bar")),
+						Integer.parseInt(el.getAttribute("instr"))
+					);
+					
+					playbackEvents.add(event);
+				}
+			}
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
 	}
 }

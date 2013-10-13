@@ -43,8 +43,8 @@ public class RecordEvent {
 
 	@Override
 	public String toString() {
-		return "RecordEvent [type=" + type + ", value=" + value
-				+ ", instrumentId=" + instrumentId + ", bar=" + bar + "]";
+		return "Record [Bar=" + bar + ", Type=" + type + ", Value=" + value
+				+ ", InstrumentId=" + instrumentId + "]";
 	}
 
 	public String getType() {

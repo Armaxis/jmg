@@ -11,7 +11,12 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
+import util.Log;
+import core.record.RecordEvent;
 import core.record.RecordsManager;
 
 public class RecordFrame extends JFrame {
@@ -22,10 +27,12 @@ public class RecordFrame extends JFrame {
 	private JButton recordButton;
 	private JButton playButton;
 	private JButton deleteButton;
+	private JButton viewButton;
 	
 	public static JFrame frame;
 	private DefaultListModel<String> listModel;
 	private JList<String> recordsList;
+	private JTextArea logArea;
 
 	public RecordFrame(MainFrame mainFrame){
 		super("Запись сценариев");
@@ -49,13 +56,16 @@ public class RecordFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (!RecordsManager.isRecording)
 				{
+					log("Запись начата!");
 					recordsManager.startRecord();
 					recordButton.setText("Остановить");
 				}
 				else
 				{
+					log("Запись завершена!");
 					recordsManager.stopRecord();
 					recordButton.setText("Запись");
+					refreshRecordsList();
 				}
 			}
 		});
@@ -71,11 +81,13 @@ public class RecordFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (!RecordsManager.isPlaying)
 				{
+					log("Воспроизведение " + recordsList.getSelectedValue() + " начато!");
 					recordsManager.playRecord(recordsList.getSelectedValue());
 					playButton.setText("Остановить");
 				} 
 				else
 				{
+					log("Воспроизведение завершено!");
 					recordsManager.stopPlayingRecord();
 					playButton.setText("Загрузить");
 				}
@@ -90,15 +102,40 @@ public class RecordFrame extends JFrame {
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Вы уверены, что хотите удалить запись?", "Подтверждение", JOptionPane.YES_NO_OPTION);
 				if(dialogResult == JOptionPane.YES_OPTION){
 					recordsManager.deleteRecord(recordsList.getSelectedValue());
+					log("Запись " + recordsList.getSelectedValue() + " удалена!");
 					refreshRecordsList();
 				}
 			}
 		});
 		
+		viewButton = new JButton("Просмотреть");
+		viewButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				recordsManager.readRecordFile(recordsList.getSelectedValue());
+				log("=================================");
+				log("Запись " + recordsList.getSelectedValue() + RecordsManager.RECORD_EXTENSION);
+				for (RecordEvent ev : recordsManager.playbackEvents)
+					log(ev.toString());
+				log("=================================");
+			}
+		});
+		
+		logArea = new JTextArea();
+        logArea.setRows(10);
+        logArea.setFont(logArea.getFont().deriveFont(12f));
+        
+        JScrollPane logScroll = new JScrollPane(logArea);
+        DefaultCaret caret = (DefaultCaret)logArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
 		panel.add(recordButton, new GBC(0,0,2,1,0.1,0.1));
 		panel.add(recordsList, new GBC(0,1,1,2,1,1).fill(GridBagConstraints.BOTH));
 		panel.add(playButton, new GBC(1,1,1,1));
 		panel.add(deleteButton, new GBC(1,2,1,1));
+		panel.add(viewButton, new GBC(1,3,1,1));
+		panel.add(logScroll, new GBC(0,4,2,1).fill(GridBagConstraints.BOTH));
 		setContentPane(panel);
 	}
 	
@@ -113,5 +150,10 @@ public class RecordFrame extends JFrame {
 		
 	}
 	
+	public void log(String text)
+	{
+		logArea.append(text + "\n");
+		Log.info("RecordFrame > Log: " + text);
+	}
 	
 }

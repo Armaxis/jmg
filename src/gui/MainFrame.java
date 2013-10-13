@@ -80,6 +80,10 @@ public class MainFrame extends JFrame {
 	public MainPanel getMainPanel() {
 		return mainPanel;
 	}
+	
+	public RecordFrame getRecorderFrame() {
+		return recorder;
+	}
 
 	public MusicGeneratorManager getGenerator() {
 		return generator;
