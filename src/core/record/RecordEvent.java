@@ -46,6 +46,21 @@ public class RecordEvent {
 		return "RecordEvent [type=" + type + ", value=" + value
 				+ ", instrumentId=" + instrumentId + ", bar=" + bar + "]";
 	}
-	
+
+	public String getType() {
+		return type;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public int getInstrumentId() {
+		return instrumentId;
+	}
+
+	public int getBar() {
+		return bar;
+	}
 	
 }

@@ -1,30 +1,57 @@
 package core.record;
 
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import util.Log;
 import core.data.DataStorage;
 import gui.GUI;
 import gui.HeaderPanel;
 import gui.InstrumentPanel;
 import gui.MainPanel;
+import gui.RecordFrame;
 
 public class RecordsManager {
 
 	public static int RECORDER_BAR_COUNTER = 0;
+	public static final String RECORDS_FOLDER = "records"; 
+	public static final String RECORD_EXTENSION = ".jmr";
+	public static boolean isRecording;
+	public static boolean isPlaying;
+	
 	private MainPanel mainPanel;
 	private HeaderPanel headerPanel;
-	public static boolean isRecording;
 	private LinkedList<RecordEvent> recordedEvents;
 	private HashMap<InstrumentPanel, Integer> instrumentPanelsIds;
 	private int nextPanelIdCounter;
+	public LinkedList<String> recordsList;
 	
 	public RecordsManager() {
 		isRecording = false;
+		isPlaying = false;
 		RECORDER_BAR_COUNTER = 0;
 		nextPanelIdCounter = 0;
 		recordedEvents = new LinkedList<RecordEvent>();
 		instrumentPanelsIds = new HashMap<InstrumentPanel, Integer>();
+		refreshRecordsList();
 	}
 
 	public void startRecord() {
@@ -63,6 +90,93 @@ public class RecordsManager {
 		}
 	}
 
+
+	public void stopRecord() {
+		isRecording = false;
+		
+		//TODO: Remove useless commands before writing to file
+		
+		//Ask user for name for record
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
+		String defaultRecordName = "Record " + dateFormat.format(Calendar.getInstance().getTime());
+		String fileName = (String)JOptionPane.showInputDialog(
+                RecordFrame.frame,
+                "Введите имя записи:",
+                "Сохранение записи",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null,
+                defaultRecordName);
+
+		if(fileName.isEmpty())
+			fileName= defaultRecordName;
+		
+		//Check if this record exists in folder. If does - add _1, _2, and so on until it doesnt exist
+		int counter = 1;
+		File saveFile = new File(RECORDS_FOLDER + "/" + fileName + RECORD_EXTENSION);
+		
+		while(saveFile.exists())
+		{
+			saveFile = new File(RECORDS_FOLDER + "/" + fileName + "_" + counter + RECORD_EXTENSION);
+			counter++;
+		}
+		
+		//Save to file whatever
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+			// root elements
+			Document doc = docBuilder.newDocument();
+			Element rootElement = doc.createElement("record");
+			doc.appendChild(rootElement);
+			
+			for(RecordEvent event : recordedEvents)
+			{
+				// Add event element
+				Element eventElement = doc.createElement("Event");
+				rootElement.appendChild(eventElement);
+		 
+				// Set attributes 
+				Attr attr = doc.createAttribute("type");
+				attr.setValue(event.getType());
+				eventElement.setAttributeNode(attr);
+				
+				attr = doc.createAttribute("value");
+				attr.setValue(event.getValue());
+				eventElement.setAttributeNode(attr);
+				
+				attr = doc.createAttribute("bar");
+				attr.setValue(Integer.toString(event.getBar()));
+				eventElement.setAttributeNode(attr);
+				
+				attr = doc.createAttribute("instr");
+				attr.setValue(Integer.toString(event.getInstrumentId()));
+				eventElement.setAttributeNode(attr);
+			}
+			
+			// write the content into xml file
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(saveFile);
+	 
+			// Output to console for testing
+			//StreamResult result = new StreamResult(System.out);
+	 
+			transformer.transform(source, result);
+	 
+			Log.info("Record saved to: " + saveFile.getName());
+			
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (TransformerException tfe) {
+			tfe.printStackTrace();
+		}
+		
+		RECORDER_BAR_COUNTER = 0;
+	}
+	
 	public void init(GUI gui) {
 		this.mainPanel = gui.frame.getMainPanel();
 		this.headerPanel = mainPanel.headerPanel;
@@ -198,4 +312,28 @@ public class RecordsManager {
 	}
 
 
+	private void refreshRecordsList() {
+		recordsList = new LinkedList<String>();
+		File folder = new File(RECORDS_FOLDER);
+		for(File f: folder.listFiles())
+		    if(f.getName().endsWith(RECORD_EXTENSION))
+		    	recordsList.add(f.getName().substring(0, f.getName().lastIndexOf(".")));
+	}
+
+	public void playRecord(String selectedValue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void stopPlayingRecord() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteRecord(String selectedValue) {
+		File f = new File(RECORDS_FOLDER + "/" + selectedValue + RECORD_EXTENSION);
+		if(f.exists())
+			f.delete();
+		refreshRecordsList();		
+	}
 }
