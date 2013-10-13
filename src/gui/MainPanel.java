@@ -49,7 +49,7 @@ public class MainPanel extends JPanel{
         add(scrollInstrumentsPane, BorderLayout.CENTER);
 	}
 
-	public void addInstrument()
+	public InstrumentPanel addInstrument()
 	{
 		Voice newVoice;
 		if(instrumentPanels.isEmpty())
@@ -81,7 +81,7 @@ public class MainPanel extends JPanel{
 		if (nextChannelId == 9)
 			nextChannelId++;
 		
-
+		return ip;
 	}
 
 	public void removeInstrument(int trackId) {

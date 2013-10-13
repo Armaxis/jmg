@@ -106,6 +106,7 @@ public class MusicGeneratorManager {
 			}
 			else 
 			{
+				recordsManager.playBar(RecordsManager.PLAYBACK_BAR_COUNTER);
 				score = generator.getScore();
 				
 				score.setTempo(Settings.TEMPO.getPerMinute());

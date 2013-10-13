@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
@@ -34,6 +35,7 @@ import gui.RecordFrame;
 public class RecordsManager {
 
 	public static int RECORDER_BAR_COUNTER = 0;
+	public static int PLAYBACK_BAR_COUNTER = 0;
 	public static final String RECORDS_FOLDER = "records"; 
 	public static final String RECORD_EXTENSION = ".jmr";
 	public static boolean isRecording;
@@ -45,7 +47,9 @@ public class RecordsManager {
 	private LinkedList<RecordEvent> recordedEvents;
 	public LinkedList<RecordEvent> playbackEvents;
 	private HashMap<InstrumentPanel, Integer> instrumentPanelsIds;
+	private HashMap<Integer, InstrumentPanel> playbackInstrumentPanelsIds;
 	private int nextPanelIdCounter;
+	private int nextPlaybackPanelIdCounter;
 	public LinkedList<String> recordsList;
 	
 	public RecordsManager() {
@@ -53,9 +57,11 @@ public class RecordsManager {
 		isPlaying = false;
 		RECORDER_BAR_COUNTER = 0;
 		nextPanelIdCounter = 0;
+		nextPlaybackPanelIdCounter = 0;
 		recordedEvents = new LinkedList<RecordEvent>();
 		playbackEvents = new LinkedList<RecordEvent>();
 		instrumentPanelsIds = new HashMap<InstrumentPanel, Integer>();
+		playbackInstrumentPanelsIds = new HashMap<Integer, InstrumentPanel>();
 		refreshRecordsList();
 	}
 
@@ -318,6 +324,9 @@ public class RecordsManager {
 	public static void incrementCounter() {
 		if (isRecording)
 			RECORDER_BAR_COUNTER++;
+//		
+//		if(isPlaying)
+//			PLAYBACK_BAR_COUNTER++;
 	}
 
 
@@ -330,13 +339,125 @@ public class RecordsManager {
 	}
 
 	public void playRecord(String selectedValue) {
-		// TODO Auto-generated method stub
-		
+		isPlaying = true;
+		nextPlaybackPanelIdCounter = 0;
+		PLAYBACK_BAR_COUNTER = 0;
+		readRecordFile(selectedValue);
+		playBar(PLAYBACK_BAR_COUNTER);
 	}
 
 	public void stopPlayingRecord() {
-		// TODO Auto-generated method stub
+		isPlaying = false;
+		nextPlaybackPanelIdCounter = 0;
+		PLAYBACK_BAR_COUNTER = 0;
+	}
+
+	public void playBar(int barId)
+	{
+		if(!isPlaying)
+			return;
 		
+		for (RecordEvent event : playbackEvents)
+		{
+			if(event.getBar() != barId)
+				continue;
+				
+			playEvent(event);
+		}
+		
+		PLAYBACK_BAR_COUNTER++;
+	}
+	
+	private void playEvent(RecordEvent event) {
+		//There goes switch. But type in event isn't int, so there will be not switch but "equals"
+		String eventType = event.getType();
+		if(eventType.equals(RecordEvent.CHANGE_TONALITY_KEY)) {
+			
+			headerPanel.tonalityKey.setSelectedIndex(Integer.parseInt(event.getValue()));
+			
+		} else if(eventType.equals(RecordEvent.CHANGE_TONALITY_TYPE)) {
+			
+			if (event.getValue().equals("1")) 
+				headerPanel.tonalityTypes.getFirst().setSelected(true); //Major
+			else
+				headerPanel.tonalityTypes.get(1).setSelected(true); //Minor
+			
+		} else if(eventType.equals(RecordEvent.SET_MELISMAS)) {
+			
+			headerPanel.melismaCheckBox.setSelected(event.getValue().equals("1"));
+			
+		} else if(eventType.equals(RecordEvent.SET_MELISMAS_CHANCE)) {
+			
+			headerPanel.melismaComboBox.setSelectedIndex(Integer.parseInt(event.getValue()));
+			
+		} else if(eventType.equals(RecordEvent.SET_TEMPO)) {
+			
+			headerPanel.tempoSlider.setValue(Integer.parseInt(event.getValue()));
+			
+		} else if(eventType.equals(RecordEvent.SET_OVERALL_VOLUME)) {
+			
+			headerPanel.volumeSlider.setValue(Integer.parseInt(event.getValue()));
+			
+		} else if(eventType.equals(RecordEvent.ADD_INSTRUMENT)) {
+			
+			InstrumentPanel panel = mainPanel.addInstrument();
+			playbackInstrumentPanelsIds.put(nextPlaybackPanelIdCounter, panel);
+			nextPlaybackPanelIdCounter++;
+			
+		} else if(eventType.equals(RecordEvent.REMOVE_INSTRUMENT)) {
+			
+			InstrumentPanel panel = playbackInstrumentPanelsIds.get(event.getInstrumentId());
+			if (panel != null)
+				mainPanel.removeInstrument(panel.trackId);
+						
+		} else if(eventType.equals(RecordEvent.REMOVE_ALL_INSTRUMENTS)) {
+			
+			mainPanel.removeAllInstruments();
+			playbackInstrumentPanelsIds = new HashMap<Integer, InstrumentPanel>();
+			
+		} else if(eventType.equals(RecordEvent.MUTE_ALL_INSTRUMENTS)) {
+			
+			for (InstrumentPanel pan : playbackInstrumentPanelsIds.values())
+			{
+				pan.muteCheckBox.setSelected(event.getValue().equals("1"));
+				pan.setMuted(event.getValue().equals("1"));
+			}
+		
+		} else if(eventType.equals(RecordEvent.SET_INSTRUMENT_TYPE)) {
+			
+			InstrumentPanel panel = playbackInstrumentPanelsIds.get(event.getInstrumentId());
+			if (panel != null)
+				panel.instrumentCombo.setSelectedIndex(DataStorage.getInstrumentIdByMidiId(Integer.parseInt(event.getValue())));
+			
+		} else if(eventType.equals(RecordEvent.SET_INSTRUMENT_ROLE)) {
+			
+			InstrumentPanel panel = playbackInstrumentPanelsIds.get(event.getInstrumentId());
+			if (panel != null)
+				panel.instrumentTypeCombo.setSelectedIndex(Integer.parseInt(event.getValue()));
+			
+		} else if(eventType.equals(RecordEvent.SET_INSTRUMENT_VOLUME)) {
+			
+			InstrumentPanel panel = playbackInstrumentPanelsIds.get(event.getInstrumentId());
+			if (panel != null)
+				panel.volumeSlider.setValue(Integer.parseInt(event.getValue()));
+			
+		} else if(eventType.equals(RecordEvent.SET_INSTRUMENT_OCTAVE)) {
+			
+			InstrumentPanel panel = playbackInstrumentPanelsIds.get(event.getInstrumentId());
+			if (panel != null)
+				panel.octaveComboBox.setSelectedIndex(Integer.parseInt(event.getValue()));
+			
+		} else if(eventType.equals(RecordEvent.SET_INSTRUMENT_MUTE)) {
+			
+			InstrumentPanel panel = playbackInstrumentPanelsIds.get(event.getInstrumentId());
+			if (panel != null)
+			{
+				panel.muteCheckBox.setSelected(event.getValue().equals("1"));
+				panel.setMuted(event.getValue().equals("1"));
+			}
+		}
+		
+		recorderFrame.log("Выполнено: " + event.toString());
 	}
 
 	public void deleteRecord(String selectedValue) {
