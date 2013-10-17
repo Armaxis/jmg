@@ -154,8 +154,11 @@ public class HeaderPanel extends JPanel {
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				Settings.TEMPO.setTempo(tempoSlider.getValue());
-				parent.generator.recordsManager.recordTempo();
+				JSlider source = (JSlider) arg0.getSource();
+		        if (!source.getValueIsAdjusting()) {
+					Settings.TEMPO.setTempo(tempoSlider.getValue());
+					parent.generator.recordsManager.recordTempo();
+		        }
 			}
 		});
 
@@ -202,8 +205,11 @@ public class HeaderPanel extends JPanel {
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				Settings.OVERALL_VOLUME = volumeSlider.getValue();
-				parent.generator.recordsManager.recordVolume();
+				JSlider source = (JSlider) arg0.getSource();
+		        if (!source.getValueIsAdjusting()) {
+					Settings.OVERALL_VOLUME = volumeSlider.getValue();
+					parent.generator.recordsManager.recordVolume();
+		        }
 			}
 		});
 	    

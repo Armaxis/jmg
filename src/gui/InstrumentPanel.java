@@ -197,8 +197,11 @@ public class InstrumentPanel extends JPanel {
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				voice.volume = volumeSlider.getValue();
-				mainPanel.generator.recordsManager.recordInstrVolume(thisPanel);
+				JSlider source = (JSlider) arg0.getSource();
+		        if (!source.getValueIsAdjusting()) {
+					voice.volume = volumeSlider.getValue();
+					mainPanel.generator.recordsManager.recordInstrVolume(thisPanel);
+		        }
 			}
 		});
 	    
@@ -229,6 +232,10 @@ public class InstrumentPanel extends JPanel {
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
+				JSlider source = (JSlider) arg0.getSource();
+		        if (!source.getValueIsAdjusting()) {
+		        	
+		        }
 				// TODO Auto-generated method stub
 		//		Main.generator.setTrackProperty(trackId, "range", rangeSlider.getValue());
 			}
