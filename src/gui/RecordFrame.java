@@ -41,7 +41,7 @@ public class RecordFrame extends JFrame {
 		this.recordsManager = mainFrame.getGenerator().recordsManager;
 		RecordFrame.frame = this;
 		initInterface();
-		setSize(500, 400);
+		setSize(500, 450);
 	}
 
 	private void initInterface() {
@@ -130,12 +130,12 @@ public class RecordFrame extends JFrame {
         DefaultCaret caret = (DefaultCaret)logArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		
-		panel.add(recordButton, new GBC(0,0,2,1,0.1,0.1));
-		panel.add(recordsList, new GBC(0,1,1,2,1,1).fill(GridBagConstraints.BOTH));
+		panel.add(recordButton, new GBC(0,0,2,1));
+		panel.add(recordsList, new GBC(0,1,1,2).fill(GridBagConstraints.HORIZONTAL));
 		panel.add(playButton, new GBC(1,1,1,1));
 		panel.add(deleteButton, new GBC(1,2,1,1));
 		panel.add(viewButton, new GBC(1,3,1,1));
-		panel.add(logScroll, new GBC(0,4,2,1).fill(GridBagConstraints.BOTH));
+		panel.add(logScroll, new GBC(0,4,2,1,1,1).fill(GridBagConstraints.BOTH));
 		setContentPane(panel);
 	}
 	

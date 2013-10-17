@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -104,9 +105,7 @@ public class RecordsManager {
 
 	public void stopRecord() {
 		isRecording = false;
-		
-		//TODO: Remove useless commands before writing to file
-		
+
 		//Ask user for name for record
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
 		String defaultRecordName = "Record " + dateFormat.format(Calendar.getInstance().getTime());
@@ -119,6 +118,13 @@ public class RecordsManager {
                 null,
                 defaultRecordName);
 
+		if (fileName == null)
+		{
+			//User pressed cancel. Ok then.
+			RECORDER_BAR_COUNTER = 0;
+			return;
+		}
+		
 		if(fileName.isEmpty())
 			fileName= defaultRecordName;
 		
@@ -131,6 +137,9 @@ public class RecordsManager {
 			saveFile = new File(RECORDS_FOLDER + "/" + fileName + "_" + counter + RECORD_EXTENSION);
 			counter++;
 		}
+		
+		//Remove useless commands before writing to file
+		filterEvents(); 
 		
 		//Save to file whatever
 		try {
@@ -191,6 +200,25 @@ public class RecordsManager {
 		RECORDER_BAR_COUNTER = 0;
 	}
 	
+	private void filterEvents()
+	{
+		HashMap<String, RecordEvent> eventsMap = new HashMap<String, RecordEvent>();
+		
+		for (RecordEvent event : recordedEvents)
+		{
+			String tag = event.getBar() + "~" + event.getInstrumentId() + "~" + event.getType();
+			eventsMap.put(tag, event);
+		}
+		
+		recordedEvents = new LinkedList<RecordEvent>();
+		for (RecordEvent event : eventsMap.values())
+		{
+			recordedEvents.add(event);
+		}
+		
+		Collections.sort(recordedEvents);
+	}
+	
 	public void init(GUI gui) {
 		this.mainPanel = gui.frame.getMainPanel();
 		this.headerPanel = mainPanel.headerPanel;
@@ -225,7 +253,7 @@ public class RecordsManager {
 		if(!isRecording)
 			return;
 		
-		record(RecordEvent.ADD_INSTRUMENT, nextPanelIdCounter);
+		record(RecordEvent.ADD_INSTRUMENT, nextPanelIdCounter, nextPanelIdCounter);
 		instrumentPanelsIds.put(ip, nextPanelIdCounter);
 		nextPanelIdCounter ++;
 	}
@@ -502,6 +530,7 @@ public class RecordsManager {
 					playbackEvents.add(event);
 				}
 			}
+		 	Collections.sort(playbackEvents);
 	    } catch (Exception e) {
 	    	e.printStackTrace();
 	    }

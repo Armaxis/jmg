@@ -1,6 +1,6 @@
 package core.record;
 
-public class RecordEvent {
+public class RecordEvent implements Comparable<RecordEvent>{
 	
 	public static String CHANGE_TONALITY_KEY 	= "tonalityKeyChanged";
 	public static String CHANGE_TONALITY_TYPE 	= "tonalityTypeChanged"; //0 - минор, 1 - мажор
@@ -61,6 +61,24 @@ public class RecordEvent {
 
 	public int getBar() {
 		return bar;
+	}
+
+	@Override
+	public int compareTo(RecordEvent o) {
+		if (this.bar < o.getBar())
+			return -1;
+		else if (this.bar > o.getBar())
+			return 1;
+		else if (this.instrumentId < o.getInstrumentId())
+			return -1;
+		else if (this.instrumentId > o.getInstrumentId())
+			return 1;
+		else if (this.type.equals(ADD_INSTRUMENT) && !o.getType().equals(ADD_INSTRUMENT))
+			return -1;
+		else if (!this.type.equals(ADD_INSTRUMENT) && o.getType().equals(ADD_INSTRUMENT))
+			return 1;
+		else 
+			return this.getValue().compareTo(o.getValue());
 	}
 	
 }
