@@ -41,7 +41,7 @@ public class RecordFrame extends JFrame {
 		this.recordsManager = mainFrame.getGenerator().recordsManager;
 		RecordFrame.frame = this;
 		initInterface();
-		setSize(300, 400);
+		setSize(500, 400);
 	}
 
 	private void initInterface() {

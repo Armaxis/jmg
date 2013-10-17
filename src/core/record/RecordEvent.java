@@ -38,7 +38,7 @@ public class RecordEvent {
 		this.type = type;
 		this.value = value;
 		this.instrumentId = instrumentId;
-		this.bar = bar;
+		this.bar = ( bar > 0 ) ? bar : 0;
 	}
 
 	@Override

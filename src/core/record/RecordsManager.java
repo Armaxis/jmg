@@ -316,7 +316,7 @@ public class RecordsManager {
 		if(!isRecording)
 			return;
 		
-		RecordEvent newEvent = new RecordEvent(eventType, value, RECORDER_BAR_COUNTER, instrumentId);
+		RecordEvent newEvent = new RecordEvent(eventType, value, RECORDER_BAR_COUNTER - 1, instrumentId);
 		recordedEvents.add(newEvent);
 		recorderFrame.log(newEvent.toString());
 	}
@@ -343,7 +343,6 @@ public class RecordsManager {
 		nextPlaybackPanelIdCounter = 0;
 		PLAYBACK_BAR_COUNTER = 0;
 		readRecordFile(selectedValue);
-		playBar(PLAYBACK_BAR_COUNTER);
 	}
 
 	public void stopPlayingRecord() {
