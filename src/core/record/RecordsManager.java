@@ -393,6 +393,15 @@ public class RecordsManager {
 		}
 		
 		PLAYBACK_BAR_COUNTER++;
+		
+		//Check if we reached end
+		if(playbackEvents.getLast().getBar() < barId)
+		{
+			stopPlayingRecord();
+			recorderFrame.playButton.setText("Загрузить");
+			recorderFrame.log("Воспроизведение завершено!");
+		}
+				
 	}
 	
 	private void playEvent(RecordEvent event) {

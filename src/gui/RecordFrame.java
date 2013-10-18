@@ -25,7 +25,7 @@ public class RecordFrame extends JFrame {
 	private JPanel panel;
 	private RecordsManager recordsManager;
 	private JButton recordButton;
-	private JButton playButton;
+	public JButton playButton;
 	private JButton deleteButton;
 	private JButton viewButton;
 	
@@ -73,6 +73,8 @@ public class RecordFrame extends JFrame {
 		listModel = new DefaultListModel<String>();
 		recordsList = new JList<String>(listModel);
 		refreshRecordsList();
+		
+		JScrollPane recordsScrollPane = new JScrollPane(recordsList);
 		
 		playButton = new JButton("Загрузить");
 		playButton.addActionListener(new ActionListener() {
@@ -130,12 +132,16 @@ public class RecordFrame extends JFrame {
         DefaultCaret caret = (DefaultCaret)logArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		
-		panel.add(recordButton, new GBC(0,0,2,1));
-		panel.add(recordsList, new GBC(0,1,1,2).fill(GridBagConstraints.HORIZONTAL));
-		panel.add(playButton, new GBC(1,1,1,1));
-		panel.add(deleteButton, new GBC(1,2,1,1));
-		panel.add(viewButton, new GBC(1,3,1,1));
-		panel.add(logScroll, new GBC(0,4,2,1,1,1).fill(GridBagConstraints.BOTH));
+        JPanel buttonsPan = new JPanel();
+        buttonsPan.setLayout(new GridBagLayout());
+        buttonsPan.add(playButton, new GBC(0,0,1,1));
+        buttonsPan.add(deleteButton, new GBC(0,1,1,1));
+        buttonsPan.add(viewButton, new GBC(0,2,1,1));
+        
+		panel.add(recordButton, new GBC(0,0,2,1,0,0));
+		panel.add(recordsScrollPane, new GBC(0,1,1,1,1,0).fill(GridBagConstraints.HORIZONTAL));
+		panel.add(buttonsPan, new GBC(1,1,1,1,0,0));
+		panel.add(logScroll, new GBC(0,2,2,1,1,1).fill(GridBagConstraints.BOTH));
 		setContentPane(panel);
 	}
 	
