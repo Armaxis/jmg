@@ -1,0 +1,34 @@
+group 'io.github.siredvin'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'application'
+
+mainClassName = "main.Main"
+
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+applicationDistribution.from('images'){
+    into 'bin/images'
+}
+
+applicationDistribution.from('database'){
+    into 'bin/database'
+}
+
+applicationDistribution.from('soundfonts'){
+    into 'bin/soundfonts'
+}
+applicationDistribution.from('records'){
+    into 'bin/records'
+}
