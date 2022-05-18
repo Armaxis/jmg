@@ -8,8 +8,8 @@ Started as a master's degree final project it continued to grow, and I hope the 
 ##Before Starting
 
 * I advise you to read [introduction article](http://habrahabr.ru/post/185154/) on Habrahabr.
-* More deeply the insides of the project are described in my [master's paper](http://armaxis.ru/files/MusicGenerator.pdf).
-* Also you can view a [quick presentation](http://armaxis.ru/files/GeneratorPresentation.pdf).
+* More deeply the insides of the project are described in my [master's paper](paper.docx).
+* Also you can view a [quick presentation](presentation.pdf).
 _All information is currently available only on Russian._
 
 ## Getting Started
