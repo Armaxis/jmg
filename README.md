@@ -1,11 +1,11 @@
-#Java Music Generator
+# Java Music Generator
 
-By Artyom Chubaryan.
+By Artem Chubaryan.
 
 Java Music Generator (or JMG) is based on [jMusic library](http://www.explodingart.com/jmusic/) and allows you to create music in real time, play it and save to MIDI or MP3.
 Started as a master's degree final project it continued to grow, and I hope the quality of the generated music will be perfected with time.
 
-##Before Starting
+## Before Starting
 
 * I advise you to read [introduction article](http://habrahabr.ru/post/185154/) on Habrahabr.
 * More deeply the insides of the project are described in my [master's paper](paper.docx).
