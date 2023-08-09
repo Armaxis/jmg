@@ -11,6 +11,7 @@ Started as a master's degree final project it continued to grow, and I hope the 
 * More deeply the insides of the project are described in my [master's paper](paper.docx).
 * Also you can view a [quick presentation](presentation.pdf).
 * If you want to play with Generator and make some music, you can [download the compiled app here](http://disk.yandex.com/d/t6Sey2ZNFbdN5).
+  
 _All information is currently available only on Russian._
 
 ## Getting Started
